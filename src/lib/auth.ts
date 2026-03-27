@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'examnote-jwt-secret-key-2024-do-not-share';
+const JWT_SECRET = process.env.JWT_SECRET!;
 const secret = new TextEncoder().encode(JWT_SECRET);
 
 export interface AuthUser {
@@ -36,7 +36,7 @@ export async function getAuthUser(): Promise<AuthUser | null> {
 
 export function validateAdminCredentials(username: string, password: string): boolean {
   return (
-    username === (process.env.ADMIN_USERNAME || 'admin') &&
-    password === (process.env.ADMIN_PASSWORD || 'ExamAI@Admin2024')
+    username === process.env.ADMIN_USERNAME &&
+    password === process.env.ADMIN_PASSWORD
   );
 }
