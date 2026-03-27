@@ -120,7 +120,7 @@ export async function getUserSessions(userId: string): Promise<ExamSession[]> {
     .limit(50);
 
   if (error) return [];
-  return data || [];
+  return (data as ExamSession[]) || [];
 }
 
 export async function getSession(sessionId: string, userId: string): Promise<ExamSession | null> {
