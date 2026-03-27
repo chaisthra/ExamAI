@@ -59,10 +59,13 @@ export async function POST(request: NextRequest) {
             .join(' ');
           if (slideText.trim()) {
             const slideNum = key.match(/slide(\d+)/)?.[1];
-            slideTexts.push(`[Slide ${slideNum}]\n${slideText}`);
+            slideTexts.push(`[Slide ${slideNum}]
+${slideText}`);
           }
         }
-        text = slideTexts.join('\n\n');
+        text = slideTexts.join('
+
+');
       } catch {
         return Response.json({ error: 'Failed to parse PowerPoint file.' }, { status: 400 });
       }
@@ -85,7 +88,9 @@ export async function POST(request: NextRequest) {
 
     // Limit text to avoid context overflow (keep ~100k chars)
     const truncated = text.length > 100000;
-    const processedText = truncated ? text.slice(0, 100000) + '\n\n[... content truncated for context limits ...]' : text;
+    const processedText = truncated ? text.slice(0, 100000) + '
+
+[... content truncated for context limits ...]' : text;
 
     return Response.json({
       text: processedText,
@@ -99,9 +104,3 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: `File processing failed: ${errorMessage}` }, { status: 500 });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
