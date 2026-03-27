@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
 
   try {
     const secret = new TextEncoder().encode(
-      process.env.JWT_SECRET || 'examnote-jwt-secret-key-2024-do-not-share'
+      process.env.JWT_SECRET!
     );
     await jwtVerify(token, secret);
     return NextResponse.next();
