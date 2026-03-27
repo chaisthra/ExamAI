@@ -59,13 +59,10 @@ export async function POST(request: NextRequest) {
             .join(' ');
           if (slideText.trim()) {
             const slideNum = key.match(/slide(\d+)/)?.[1];
-            slideTexts.push(`[Slide ${slideNum}]
-${slideText}`);
+            slideTexts.push(`[Slide ${slideNum}]\n${slideText}`);
           }
         }
-        text = slideTexts.join('
-
-');
+        text = slideTexts.join('\n\n');
       } catch {
         return Response.json({ error: 'Failed to parse PowerPoint file.' }, { status: 400 });
       }
@@ -88,9 +85,7 @@ ${slideText}`);
 
     // Limit text to avoid context overflow (keep ~100k chars)
     const truncated = text.length > 100000;
-    const processedText = truncated ? text.slice(0, 100000) + '
-
-[... content truncated for context limits ...]' : text;
+    const processedText = truncated ? text.slice(0, 100000) + '\n\n[... content truncated for context limits ...]' : text;
 
     return Response.json({
       text: processedText,
